@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  If you want to vary the amount of time per frame, list the same frame element again
+-->
+<spritesheet file="randy.png">
+  <colorkey r="149" g="177" b="200"></colorkey>
+  <animation name="walking" loop="true" frames="4" fps="5">
+    <frame>
+      <coord x="22" y="394"></coord>
+      <dimensions w="25" h="45"></dimensions>
+    </frame>
+    <frame>
+      <coord x="54" y="394"></coord>
+      <dimensions w="25" h="44"></dimensions>
+    </frame>
+    <frame>
+      <coord x="85" y="394"></coord>
+      <dimensions w="25" h="44"></dimensions>
+    </frame>
+    <frame>
+      <coord x="115" y="393"></coord>
+      <dimensions w="25" h="44"></dimensions>
+    </frame>
+  </animation>
+  <animation name="running" loop="true" frames="6" fps="5">
+    <frame>
+      <coord x="148" y="400"></coord>
+      <dimensions w="37" h="40"></dimensions>
+    </frame>
+    <frame>
+      <coord x="187" y="400"></coord>
+      <dimensions w="37" h="40"></dimensions>
+    </frame>
+    <frame>
+      <coord x="230" y="400"></coord>
+      <dimensions w="37" h="40"></dimensions>
+    </frame>
+    <frame>
+      <coord x="275" y="400"></coord>
+      <dimensions w="37" h="40"></dimensions>
+    </frame>
+    <frame>
+      <coord x="316" y="400"></coord>
+      <dimensions w="37" h="40"></dimensions>
+    </frame>
+    <frame>
+      <coord x="361" y="400"></coord>
+      <dimensions w="37" h="40"></dimensions>
+    </frame>
+  </animation>
+</spritesheet>

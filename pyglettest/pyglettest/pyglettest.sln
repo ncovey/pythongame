@@ -1,0 +1,23 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27130.2036
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "pyglettest", "pyglettest.pyproj", "{79690644-15F4-4E5E-B546-61EF0D7A7346}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{79690644-15F4-4E5E-B546-61EF0D7A7346}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{79690644-15F4-4E5E-B546-61EF0D7A7346}.Release|Any CPU.ActiveCfg = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D009F3AA-3219-42C8-A662-70E63783D2E6}
+	EndGlobalSection
+EndGlobal

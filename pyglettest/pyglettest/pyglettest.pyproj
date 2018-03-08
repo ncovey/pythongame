@@ -1,0 +1,88 @@
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>79690644-15f4-4e5e-b546-61ef0d7a7346</ProjectGuid>
+    <ProjectHome>
+    </ProjectHome>
+    <StartupFile>examples\obj\obj_viewer.py</StartupFile>
+    <SearchPath>
+    </SearchPath>
+    <WorkingDirectory>.</WorkingDirectory>
+    <OutputPath>.</OutputPath>
+    <Name>pyglettest</Name>
+    <RootNamespace>euclidtest</RootNamespace>
+    <IsWindowsApplication>False</IsWindowsApplication>
+    <InterpreterId>Global|PythonCore|2.7-32</InterpreterId>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <DebugSymbols>true</DebugSymbols>
+    <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <DebugSymbols>true</DebugSymbols>
+    <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="CstmUtils.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="euclidtest.py" />
+    <Compile Include="examples\obj\obj_viewer.py">
+      <Publish>False</Publish>
+    </Compile>
+    <Compile Include="shadertest.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="texturetest.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="vshader_tex.glsl">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <InterpreterReference Include="Global|PythonCore|2.7-32" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="assets\Rigged_Hand\HAND_C.jpg" />
+    <Content Include="assets\Rigged_Hand\HAND_N .jpg" />
+    <Content Include="assets\Rigged_Hand\HAND_S.jpg" />
+    <Content Include="assets\Rigged_Hand\Rigged Hand.mtl" />
+    <Content Include="assets\Rigged_Hand\Rigged Hand.obj" />
+    <Content Include="examples\obj\box.mtl" />
+    <Content Include="examples\obj\box.obj" />
+    <Content Include="examples\obj\monkey.mtl" />
+    <Content Include="examples\obj\monkey.obj" />
+    <Content Include="examples\obj\Rigged Hand.mtl" />
+    <Content Include="examples\obj\Rigged Hand.obj" />
+    <Content Include="examples\obj\uv_sphere.mtl" />
+    <Content Include="examples\obj\uv_sphere.obj" />
+    <Content Include="pshader.glsl">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="pshader_tex.glsl">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="vshader.glsl">
+      <SubType>Code</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="assets\" />
+    <Folder Include="assets\Rigged_Hand\" />
+    <Folder Include="assets\Rigged_Hand\textures\" />
+    <Folder Include="C:\Users\nc6990\source\repos\pyglettest\pyglettest\examples\" />
+    <Folder Include="examples\" />
+    <Folder Include="examples\obj\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
+  <!-- Uncomment the CoreCompile target to enable the Build command in
+       Visual Studio and specify your pre- and post-build commands in
+       the BeforeBuild and AfterBuild targets below. -->
+  <!--<Target Name="CoreCompile" />-->
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+</Project>
