@@ -26,6 +26,9 @@
     <Compile Include="examples\gl.pyw" />
     <Compile Include="examples\main.py" />
     <Compile Include="examples\objects.py" />
+    <Compile Include="cstmmath.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="pygametest.py">
       <SubType>Code</SubType>
     </Compile>
@@ -50,11 +53,23 @@
     <Folder Include="examples\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="assets\BKG01.png" />
+    <Content Include="assets\BKG03.png" />
+    <Content Include="assets\Blocks.png" />
+    <Content Include="assets\Bricks.png" />
+    <Content Include="assets\BricksWide.png" />
+    <Content Include="assets\Columns.png" />
+    <Content Include="assets\Crate.png" />
+    <Content Include="assets\Gems.png" />
+    <Content Include="assets\Level01.png" />
+    <Content Include="assets\Level02.png" />
+    <Content Include="assets\Levels.png" />
     <Content Include="assets\Rigged_Hand\HAND_C.jpg" />
     <Content Include="assets\Rigged_Hand\HAND_N .jpg" />
     <Content Include="assets\Rigged_Hand\HAND_S.jpg" />
     <Content Include="assets\Rigged_Hand\Rigged Hand.mtl" />
     <Content Include="assets\Rigged_Hand\Rigged Hand.obj" />
+    <Content Include="assets\Tileset.png" />
     <Content Include="battle.png" />
     <Content Include="randy.png" />
     <Content Include="randy.xml">

@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import random, os.path
+import math
 
 #import basic pygame modules
 import pygame
@@ -13,6 +14,7 @@ from enum import Enum
 if not pygame.image.get_extended():
     raise SystemExit("Sorry, extended image module required")
 
+import cstmmath
 
 #game constants
 SCREENRECT     = Rect(0, 0, 640, 480)
@@ -36,6 +38,12 @@ def load_images(*files):
     return imgs
 
 
+class RigidBody2D():
+    def __init__(self, **kwargs):
+        return super().__init__(**kwargs)
+
+
+
 
 # each type of game object gets an init and an
 # update function. the update function is called
@@ -48,12 +56,16 @@ def load_images(*files):
 
 class Player(pygame.sprite.Sprite):
     
-    class PlayerState(Enum):
-        MOVING, NOTMOVING = range(2)
+    class PlayerMoveState(Enum):
+        MOVING, NOTMOVING, JUMPING, FALLING, LANDING = range(5)
+
+    class PlayerAnimState(Enum):
+        IDLE_0, IDLE_1, RUNNING, WALKING, JUMPING, FALLING, LANDING = range(7)
 
     def __init__(self, anims=[]):
         pygame.sprite.Sprite.__init__(self, self.containers)        
-        self.speed = 10
+        self.speed = 500.0
+        self.jump_pow = 100.0 # ???
         self.images = []
         self.currtime = 0
         #self.ss = spritesheet(self.file_sprite_sheet)
@@ -61,31 +73,134 @@ class Player(pygame.sprite.Sprite):
         self.n = 0
         self.sprite_strips[self.n].iter()
         self.image = self.sprite_strips[self.n].next()
-        self.player_state = Player.PlayerState.NOTMOVING
+        self.player_state = Player.PlayerMoveState.NOTMOVING
+        self.player_anim_state = Player.PlayerAnimState.IDLE_0
         #self.image = self.images[0]
         self.rect = self.image.get_rect(midbottom=SCREENRECT.midbottom)
-        self.reloading = 0
-        self.origtop = self.rect.top
         self.facing = -1
+        #self.direction = cstmmath.Vector2D(0.0, 0.0)
+        self.velocity = cstmmath.Vector2D(0.0, 0.0)
+        self.mass = 1.0 # ???
+        self.MAX_VELOCITY = 250.0 # ???
+        self.K_FRICTION = 100.0
+        self.__last_acceleration = 0.0
+        
+    def get_strip_from_anim(self, anim_enum):
+        for strip in self.sprite_strips:
+            if (anim_enum == Player.PlayerAnimState.IDLE_0 and strip.name == "idle_stance_right_0"):
+                return strip
+            elif (anim_enum == Player.PlayerAnimState.IDLE_1 and strip.name == "idle_stance_left_0"):
+                return strip
+            elif (anim_enum == Player.PlayerAnimState.RUNNING and strip.name == "running"):
+                return strip
+            elif (anim_enum == Player.PlayerAnimState.WALKING and strip.name == "walking"):
+                return strip
+            elif (anim_enum == Player.PlayerAnimState.JUMPING and strip.name == "jump_straight"):
+                return strip
+            elif (anim_enum == Player.PlayerAnimState.FALLING and strip.name == "jump_falling"):
+                return strip
+            elif (anim_enum == Player.PlayerAnimState.LANDING and strip.name == "jump_landing"):
+                return strip
 
-    def move(self, direction):
-        if direction: 
-            self.facing = direction
-        if direction == 0: 
-            self.player_state = Player.PlayerState.NOTMOVING
-        else:
-            self.player_state = Player.PlayerState.MOVING
-        self.rect.move_ip(direction*self.speed, 0)
+
+    def move(self, direction:cstmmath.Vector2D, _dt:int, doAccelerate=True):
+        #print (self.velocity.x, self.velocity.y)
+
+        dt = (float(_dt)/1000.0)        
+        
+        if (doAccelerate == False):
+            self.velocity = self.speed * direction
+            self.rect.move_ip(self.velocity.x * dt, self.velocity.y * dt)
+            self.rect = self.rect.clamp(SCREENRECT)
+            return
+
+        acceleration = direction * (self.speed / self.mass)
+
+        print (acceleration.x, acceleration.y)
+        #x0 = cstmmath.Vector2D(self.rect.x, self.rect.y)
+
+        self.velocity += acceleration * dt
+        dx = self.velocity * dt
+
+        if (math.fabs(self.velocity.x * (direction.x)) > math.fabs(self.MAX_VELOCITY * (direction.x))):
+            self.velocity.x = self.MAX_VELOCITY * (direction.x)
+
+        print (dx.x, dx.y)
+        mdx = round(dx.x)
+        mdy = round(dx.y)
+        self.rect.move_ip(mdx, mdy)
         self.rect = self.rect.clamp(SCREENRECT)
 
+        
+
     def update(self, *args):
-        print ('elapsed time: {} ms'.format(pygame.time.get_ticks() - self.currtime))
+        dt = pygame.time.get_ticks() - self.currtime
+        #print ('elapsed time: {} ms'.format(dt))
         self.currtime = pygame.time.get_ticks()
-        if (self.player_state == Player.PlayerState.MOVING):
-            if (self.facing > 0):
-                self.image = self.sprite_strips[self.n].next()
-            elif (self.facing < 0):
-                self.image = pygame.transform.flip(self.sprite_strips[self.n].next(), 1, 0)
+                
+        #handle player input
+        keystate = pygame.key.get_pressed()
+
+        direction = cstmmath.Vector2D(0.0, 0.0)
+        direction.x = keystate[K_RIGHT] - keystate[K_LEFT]
+        if (math.fabs(direction.x) != 0):
+            self.facing = direction.x
+
+        if (keystate[K_SPACE] == 1):
+            direction.y = (-1.0)
+
+        doAccelerate = True
+
+        if (direction.x != 0):
+            self.player_state = Player.PlayerMoveState.MOVING
+            self.n = keystate[K_LSHIFT]
+            if (self.n == 1):
+                self.player_anim_state = Player.PlayerAnimState.RUNNING
+                self.speed = 500.0
+            if (self.n == 0):
+                self.player_anim_state = Player.PlayerAnimState.WALKING
+                doAccelerate = False
+                self.speed = 125.0
+        else:
+            self.player_anim_state = Player.PlayerAnimState.IDLE_0
+            self.player_state = Player.PlayerMoveState.NOTMOVING
+            self.velocity *= 0.0
+
+
+            
+        self.move(direction, dt, doAccelerate)
+
+        #elif (keystate[K_SPACE] == 1):
+        #    self.player_state = Player.PlayerMoveState.JUMPING
+        #    self.player_anim_state = Player.PlayerAnimState.JUMPING
+            
+        #elif (keystate[K_LCTRL] == 1):
+        #    self.player_state = Player.PlayerMoveState.FALLING
+        #    self.player_anim_state = Player.PlayerAnimState.FALLING
+            
+        #elif (keystate[K_LALT] == 1):
+        #    self.player_state = Player.PlayerMoveState.LANDING
+        #    self.player_anim_state = Player.PlayerAnimState.LANDING       
+        #else:
+            #if (self.player_anim_state != Player.PlayerAnimState.IDLE_0 and 
+            #    self.player_anim_state != Player.PlayerAnimState.IDLE_1):
+            #    if (random.randint(0,1) == 0):
+            #        self.player_anim_state = Player.PlayerAnimState.IDLE_0 
+            #    else:
+            #        self.player_anim_state = Player.PlayerAnimState.IDLE_1
+            
+        strip = self.get_strip_from_anim(self.player_anim_state)
+
+        if (self.facing > 0):
+            self.image = strip.animate(dt)
+        elif (self.facing < 0):
+            self.image = pygame.transform.flip(strip.animate(dt), 1, 0)
+
+        x = self.rect.x
+        y = self.rect.y
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
 
         return super().update(*args)
 
@@ -102,14 +217,14 @@ def main(winstyle = 0):
     #decorate the game window
     #icon = pygame.transform.scale(Alien.images[0], (32, 32))
     #pygame.display.set_icon(icon)
-    pygame.display.set_caption('Pygame Aliens')
+    pygame.display.set_caption('Randy')
     pygame.mouse.set_visible(1)
 
     #create the background, tile the bgd image
-    bgdtile = load_image('background.gif')
+    bgdtile = load_image('..\\assets\\BKG03.png')
     background = pygame.Surface(SCREENRECT.size)
     for x in range(0, SCREENRECT.width, bgdtile.get_width()):
-        background.blit(bgdtile, (x, 0))
+        background.blit(bgdtile, (x, 480-1024))
     screen.blit(background, (0,0))
     pygame.display.flip()
 
@@ -130,7 +245,7 @@ def main(winstyle = 0):
 
     _break = False
 
-    while player.alive():
+    while (True):
 
         #get input
         for event in pygame.event.get():
@@ -146,21 +261,19 @@ def main(winstyle = 0):
 
         #update all the sprites
         all.update()
-
-        #handle player input
-        print (keystate[K_RIGHT], keystate[K_LEFT])
-
-        direction = keystate[K_RIGHT] - keystate[K_LEFT]
-        player.move(direction)
-        firing = keystate[K_SPACE]
-        player.n = keystate[K_SPACE]
-
+        
         #draw the scene
         dirty = all.draw(screen)
         pygame.display.update(dirty)
+        
+        
+        pygame.draw.rect(screen, (255,0,0), player.rect, 2)
+        screen.blit(player.image, player.rect)
+        
+        pygame.display.flip()
 
         #cap the framerate
-        clock.tick(30)
+        clock.tick(60)
 
     #end game
     pygame.quit()

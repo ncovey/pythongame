@@ -61,7 +61,7 @@ class OBJModel:
                                 vi_1, vi_2, vi_3, vi_4 = data[1:5]
                                 self.quad_indices.extend((int(vi_1) - 1, int(vi_2) - 1, int(vi_3) - 1, int(vi_4) - 1))
                             else:
-                                vi_1 = f.split('/')
+                                vi_1, vi_2, vi_3, vi_4 = data[1:5]
                                 print ('{} {} {} {}'.format(vi_1, vi_2, vi_3, vi_4))
 
                         elif len(data) == 4:

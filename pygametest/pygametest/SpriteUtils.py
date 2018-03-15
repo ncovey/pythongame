@@ -60,7 +60,7 @@ class SpriteStripAnim(object):
     __add__() method for joining strips which comes in handy when a
     strip wraps to the next row.
     """
-    def __init__(self, filename, rect=None, count=0, colorkey=None, loop=False, frames=1, framelist=[]):
+    def __init__(self, filename, name, rect=None, count=0, colorkey=None, loop=False, fps=-1.0, framelist=[]):
         """construct a SpriteStripAnim
         
         filename, rect, count, and colorkey are the same arguments used
@@ -73,6 +73,7 @@ class SpriteStripAnim(object):
         the iterator advances to the next image.
         """
         self.filename = filename
+        self.name = name
         ss = spritesheet(filename)
         self.images = []
         if (rect != None):
@@ -80,26 +81,35 @@ class SpriteStripAnim(object):
         elif (len(framelist) > 0):
             for frm in framelist:
                 self.images.append(ss.image_at(frm, colorkey))
-        self.i = 0
+        self.__image = self.images[0]
+        self.current_frame = 0
         self.loop = loop
-        self.frames = frames
-        self.f = frames
+        self.__time_elapsed_ms = 0
+        self.fps = fps
     def iter(self):
-        self.i = 0
-        self.f = self.frames
+        self.current_frame = 0
+        self.__time_elapsed_ms = 0
         return self
     def next(self):
-        if self.i >= len(self.images):
+        if self.current_frame >= len(self.images):
             if not self.loop:
-                raise StopIteration
+                #raise StopIteration
+                return self.images[self.current_frame-1]
             else:
-                self.i = 0
-        image = self.images[self.i]
-        self.f -= 1
-        if self.f == 0:
-            self.i += 1
-            self.f = self.frames
-        return image
+                self.current_frame = 0
+        self.__image = self.images[self.current_frame]
+        self.current_frame += 1
+        return self.__image
+    def animate(self, dt):
+        if (self.fps == -1):
+            return self.next()
+        self.__time_elapsed_ms += dt
+        frame_dt = ((1.0/self.fps)*1000.0)
+        if (self.__time_elapsed_ms >= frame_dt):
+            self.__time_elapsed_ms = 0
+            return self.next()
+        else:
+            return self.__image
     def __add__(self, ss):
         self.images.extend(ss.images)
         return self
@@ -126,12 +136,12 @@ def ProcessSpriteSheetAnimsFromXML(filename):
             #print (coord, dim)
         name = anim.get('name')
         do_loop = (anim.get('loop').lower() == 'true')
-        numframes = int(anim.get('frames'))
+        numframes = int(anim.get('numframes'))
         if (numframes > len(frames)):
             warnings.warn("frame number specified for the animation '{}' is greater than number of XML elements in file: '{}' (Expected {}, found {}).".format(name, filename, numframes, len(frames)))
         if (numframes < len(frames)):
             warnings.warn("frame number specified for the animation '{}' is less than the actual number of XML elements in file: '{}'. The last {} frame elements will be ignored.".format(name, filename, (len(frames)-numframes)))
         fps = int(anim.get('fps'))
-        animation = SpriteStripAnim(img_sprite_sheet, None, numframes, colorkey, do_loop, fps, frames)
+        animation = SpriteStripAnim(img_sprite_sheet, name, None, numframes, colorkey, do_loop, fps, frames)
         animations.append(animation)
     return animations

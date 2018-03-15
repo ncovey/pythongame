@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
   If you want to vary the amount of time per frame, list the same frame element again
+  TODO: add frame play time (e.g. play this frame for 100ms, then this frame for 200ms)
+  TODO: implement frame start and end
+  TODO: add name attribute to frames
 -->
 <spritesheet file="randy.png">
+  
   <colorkey r="149" g="177" b="200"></colorkey>
-  <animation name="walking" loop="true" frames="4" fps="5">
+  
+  <animation name="walking" loop="true" numframes="4" fps="5">
     <frame>
       <coord x="22" y="394"></coord>
       <dimensions w="25" h="45"></dimensions>
@@ -22,30 +27,114 @@
       <dimensions w="25" h="44"></dimensions>
     </frame>
   </animation>
-  <animation name="running" loop="true" frames="6" fps="5">
+  
+  <animation name="running" loop="true" numframes="6" fps="10">
     <frame>
-      <coord x="148" y="400"></coord>
+      <coord x="148" y="398"></coord>
       <dimensions w="37" h="40"></dimensions>
     </frame>
     <frame>
-      <coord x="187" y="400"></coord>
+      <coord x="187" y="398"></coord>
       <dimensions w="37" h="40"></dimensions>
     </frame>
     <frame>
-      <coord x="230" y="400"></coord>
+      <coord x="230" y="398"></coord>
       <dimensions w="37" h="40"></dimensions>
     </frame>
     <frame>
-      <coord x="275" y="400"></coord>
+      <coord x="275" y="398"></coord>
       <dimensions w="37" h="40"></dimensions>
     </frame>
     <frame>
-      <coord x="316" y="400"></coord>
+      <coord x="316" y="398"></coord>
       <dimensions w="37" h="40"></dimensions>
     </frame>
     <frame>
-      <coord x="361" y="400"></coord>
+      <coord x="361" y="398"></coord>
       <dimensions w="37" h="40"></dimensions>
     </frame>
   </animation>
+  
+  <animation name="idle_0" loop="true" numframes="4" fps="1">
+    <frame>
+      <coord x="24" y="210"></coord>
+      <dimensions w="25" h="45"></dimensions>
+    </frame>
+    <frame>
+      <coord x="177" y="270"></coord>
+      <dimensions w="25" h="45"></dimensions>
+    </frame>
+    <frame>
+      <coord x="213" y="270"></coord>
+      <dimensions w="25" h="45"></dimensions>
+    </frame>
+    <frame>
+      <coord x="177" y="270"></coord>
+      <dimensions w="25" h="45"></dimensions>
+    </frame>
+  </animation>
+  
+  <animation name="idle_1" loop="true" numframes="5" fps="3">
+    <frame>
+      <coord x="243" y="271"></coord>
+      <dimensions w="25" h="45"></dimensions>
+    </frame>    
+    <frame>
+      <coord x="273" y="271"></coord>
+      <dimensions w="25" h="45"></dimensions>
+    </frame>
+    <frame>
+      <coord x="305" y="271"></coord>
+      <dimensions w="25" h="45"></dimensions>
+    </frame>
+    <frame>
+      <coord x="333" y="271"></coord>
+      <dimensions w="25" h="45"></dimensions>
+    </frame>  
+    <frame>
+      <coord x="371" y="271"></coord>
+      <dimensions w="27" h="45"></dimensions>
+    </frame>
+  </animation>
+
+  <animation name="idle_stance_right_0" loop="false" numframes="1" fps="-1">
+    <frame>
+      <coord x="24" y="210"></coord>
+      <dimensions w="25" h="45"></dimensions>
+    </frame>
+  </animation>
+  
+  <animation name="idle_stance_left_0" loop="false" numframes="1" fps="-1">
+    <frame>
+      <coord x="88" y="210"></coord>
+      <dimensions w="25" h="45"></dimensions>
+    </frame>
+  </animation>
+
+  <animation name="jump_straight" loop="false" numframes="1" fps="-1">
+    <frame>
+      <coord x="25" y="547"></coord>
+      <dimensions w="33" h="41"></dimensions>
+    </frame>
+  </animation>
+
+  <animation name="jump_falling" loop="false" numframes="1" fps="-1">
+    <frame>
+      <coord x="64" y="548"></coord>
+      <dimensions w="33" h="41"></dimensions>
+    </frame>
+  </animation>
+  
+  <animation name="jump_landing" loop="false" numframes="2" fps="4">
+    <frame>
+      <coord x="110" y="560"></coord>
+      <dimensions w="35" h="29"></dimensions>
+    </frame>
+    <frame>
+      <coord x="160" y="558"></coord>
+      <dimensions w="33" h="31"></dimensions>
+    </frame>
+  </animation>  
+
+
 </spritesheet>
